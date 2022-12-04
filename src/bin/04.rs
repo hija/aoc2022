@@ -12,7 +12,7 @@ fn do_overlap(s1: Vec<u32>, s2: Vec<u32>) -> bool {
     return intersection.len() > 0;
 }
 
-pub fn part_one(input: &str) -> Option<u32> {
+fn solve_task(input: &str, function: &dyn Fn(Vec<u32>, Vec<u32>) -> bool) -> Option<u32> {
     let result = input.lines().map(|l| {
         let mut elf_vectors = l.split(",").map(|p| {
             let mut iterator = p.split("-");
@@ -25,7 +25,7 @@ pub fn part_one(input: &str) -> Option<u32> {
         let first_range = elf_vectors.next().unwrap();
         let second_range = elf_vectors.next().unwrap();
 
-        return match is_contained(first_range, second_range) {
+        return match function(first_range, second_range) {
             true => 1 as u32,
             _ => 0 as u32,
         };
@@ -34,26 +34,12 @@ pub fn part_one(input: &str) -> Option<u32> {
     return sum_result;
 }
 
+pub fn part_one(input: &str) -> Option<u32> {
+    return solve_task(input, &is_contained);
+}
+
 pub fn part_two(input: &str) -> Option<u32> {
-    let result = input.lines().map(|l| {
-        let mut elf_vectors = l.split(",").map(|p| {
-            let mut iterator = p.split("-");
-            let start_vec = iterator.next().unwrap().parse::<u32>().unwrap();
-            let end_vec = iterator.last().unwrap().parse::<u32>().unwrap();
-            let elf_vector = start_vec..=end_vec;
-            return elf_vector.collect::<Vec<u32>>();
-        });
-
-        let first_range = elf_vectors.next().unwrap();
-        let second_range = elf_vectors.next().unwrap();
-
-        return match do_overlap(first_range, second_range) {
-            true => 1 as u32,
-            _ => 0 as u32,
-        };
-    });
-    let sum_result: Option<u32> = Some(result.sum());
-    return sum_result;
+    return solve_task(input, &do_overlap);
 }
 
 fn main() {
