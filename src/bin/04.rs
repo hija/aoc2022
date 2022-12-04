@@ -13,7 +13,7 @@ fn do_overlap(s1: Vec<u32>, s2: Vec<u32>) -> bool {
 }
 
 fn solve_task(input: &str, function: &dyn Fn(Vec<u32>, Vec<u32>) -> bool) -> Option<u32> {
-    let result = input.lines().map(|l| {
+    let result = input.lines().filter(|l| {
         let mut elf_vectors = l.split(",").map(|p| {
             let mut iterator = p.split("-");
             let start_vec = iterator.next().unwrap().parse::<u32>().unwrap();
@@ -25,12 +25,9 @@ fn solve_task(input: &str, function: &dyn Fn(Vec<u32>, Vec<u32>) -> bool) -> Opt
         let first_range = elf_vectors.next().unwrap();
         let second_range = elf_vectors.next().unwrap();
 
-        return match function(first_range, second_range) {
-            true => 1 as u32,
-            _ => 0 as u32,
-        };
+        return function(first_range, second_range);
     });
-    let sum_result: Option<u32> = Some(result.sum());
+    let sum_result: Option<u32> = Some(result.count() as u32);
     return sum_result;
 }
 
