@@ -36,7 +36,7 @@ pub fn part_one(input: &str) -> Option<u32> {
             let bottom_elements: u32 = puzzleMatrix[row + 1..puzzleMatrix.len()]
                 .into_iter()
                 .filter(|x| x[column] >= element)
-                .count() as u32
+                .count() as u32;
 
             if left_elements == 0
                 || right_elements == 0
